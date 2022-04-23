@@ -4,19 +4,25 @@ import CustomSnackBar from '../../components/CustomSnackBar/CustomSnackBar';
 import RecipeCard from '../../components/RecipeCard/RecipeCard';
 import SearchWithIngr from '../../components/SearchWithIngr/SearchWithIngr';
 import SearchWithName from '../../components/SearchWithName/SearchWithName';
-import {getRecipes} from '../../services/recipe-service';
-import {Recipe} from '../../utils/types';
+import {getRecipeInformationList, getRecipes, getRecipesByIngredient} from '../../services/recipe-service';
+import {Recipe, RecipeInformation} from '../../utils/types';
 
 const Home = () : JSX.Element => {
   const [isSearchWithName, setIsSearchWithName] = useState(false);
   const [isSearchWithIngr, setIsSearchWithIngr] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [recipeList, setRecipeList] = useState<Recipe[]>([]);
   const [isError, setIsError] = useState(false);
+  const [recipeInfoList, setRecipeInfoList] = useState<RecipeInformation[]>([]);
 
   const handleBack = () => {
     setIsSearchWithIngr(false);
     setIsSearchWithName(false);
+  };
+
+  const getIdList = (recipeList: Recipe[]): number[] => {
+    const idList: number[] = [];
+    recipeList.forEach((recipe) => idList.push(recipe.id));
+    return idList;
   };
 
   const handleAlertClose = () => {
@@ -27,6 +33,10 @@ const Home = () : JSX.Element => {
     fetchData(name);
   };
 
+  const searchWithIngredients = (ingredients: string[]) => {
+    fetchDataWithIngredient(ingredients);
+  };
+
   const fetchData = async (name: string) => {
     if (!isLoading) {
       setIsLoading(true);
@@ -34,7 +44,31 @@ const Home = () : JSX.Element => {
         const recipeResponse = await getRecipes(name);
 
         if (recipeResponse && recipeResponse.status === 200) {
-          setRecipeList(recipeResponse.data.results);
+          const recipeInformationListResponse = await getRecipeInformationList(getIdList(recipeResponse.data.results));
+
+          if (recipeInformationListResponse && recipeInformationListResponse.status === 200) {
+            setRecipeInfoList(recipeInformationListResponse.data);
+          }
+        }
+      } catch (error) {
+        setIsError(true);
+      }
+    }
+    setIsLoading(false);
+  };
+
+  const fetchDataWithIngredient = async (ingredients: string[]) => {
+    if (!isLoading) {
+      setIsLoading(true);
+      try {
+        const recipeResponse = await getRecipesByIngredient(ingredients);
+
+        if (recipeResponse && recipeResponse.status === 200) {
+          const recipeInformationListResponse = await getRecipeInformationList(getIdList(recipeResponse.data));
+
+          if (recipeInformationListResponse && recipeInformationListResponse.status === 200) {
+            setRecipeInfoList(recipeInformationListResponse.data);
+          }
         }
       } catch (error) {
         setIsError(true);
@@ -55,7 +89,7 @@ const Home = () : JSX.Element => {
         marginInline: 'auto',
       }}>
         { isSearchWithName && <SearchWithName handleBack={() => handleBack()} searchWithName={(name: string) => searchWithName(name)} />}
-        { isSearchWithIngr && <SearchWithIngr handleBack={() => handleBack()} />}
+        { isSearchWithIngr && <SearchWithIngr handleBack={() => handleBack()} searchWithIngredient={(ingredients: string[]) => searchWithIngredients(ingredients)}/>}
         { (!isSearchWithName && !isSearchWithIngr) &&
           <Stack direction="row" spacing={2} sx={{
             justifyContent: 'center',
@@ -83,8 +117,8 @@ const Home = () : JSX.Element => {
         height: '30vh',
       }}>
         {isLoading ? <CircularProgress color='secondary' /> :
-        <>{recipeList.map((recipe: Recipe) => (
-          <RecipeCard key={recipe.id} title={recipe.title} image={recipe.image}/>
+        <>{recipeInfoList.map((recipeInfo: RecipeInformation) => (
+          <RecipeCard key={recipeInfo.id} recipeInfo={recipeInfo}/>
         ))}</>
         }
       </div>

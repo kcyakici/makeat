@@ -2,14 +2,14 @@ import {CardActionArea, CardContent, CardHeader, CardMedia, Typography} from '@m
 import Card from '@mui/material/Card';
 import * as React from 'react';
 import {useState} from 'react';
+import {RecipeInformation} from '../../utils/types';
 import RecipeModal from '../RecipeModal/RecipeModal';
 
 type RecipeCardProps = {
-  title: string;
-  image: string;
+  recipeInfo: RecipeInformation
 }
 
-const RecipeCard = ({title, image} : RecipeCardProps) : JSX.Element => {
+const RecipeCard = ({recipeInfo} : RecipeCardProps) : JSX.Element => {
   const [isRecipeModelOpen, setIsRecipeModelOpen] = useState(false);
 
   const handleModelClose = () => {
@@ -25,13 +25,13 @@ const RecipeCard = ({title, image} : RecipeCardProps) : JSX.Element => {
       <Card sx={{maxWidth: 345}}>
         <CardActionArea onClick={() => handleModelOpen()}>
           <CardHeader
-            title={title}
+            title={recipeInfo.title}
           />
 
           <CardMedia
             component="img"
             height="194"
-            image={image}/>
+            image={recipeInfo.image}/>
 
           <CardContent>
             <Typography variant="body2" color="text.secondary">

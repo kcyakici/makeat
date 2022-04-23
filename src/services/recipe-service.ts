@@ -1,6 +1,7 @@
 import {AxiosResponse} from 'axios';
+import qs from 'qs';
 import {instance} from '../utils/instance';
-import {Recipe, RecipeResponse} from '../utils/types';
+import {Recipe, RecipeInformation, RecipeResponse} from '../utils/types';
 
 const getRecipes = async (name: string): Promise<AxiosResponse<RecipeResponse>> => {
   const params = {
@@ -19,8 +20,27 @@ const getRecipesByIngredient = async (ingredients: string[]) : Promise<AxiosResp
     ignorePantry: 'false',
   };
 
-  return await instance.get('/recipes/findByIngredients', {params: params});
+  return await instance.get('/recipes/findByIngredients', {
+    params: params,
+    paramsSerializer: (params) => {
+      return qs.stringify(params, {arrayFormat: 'comma'});
+    }} );
 };
 
-export {getRecipes, getRecipesByIngredient};
+const getRecipeInformationList = async (idList: number[]) : Promise<AxiosResponse<RecipeInformation[]>> => {
+  const params = {
+    ids: idList,
+    includeNutrition: 'false',
+  };
+
+  console.log('Servisteyim params: ', params);
+
+  return await instance.get('recipes/informationBulk', {
+    params: params,
+    paramsSerializer: (params) => {
+      return qs.stringify(params, {arrayFormat: 'comma'});
+    }});
+};
+
+export {getRecipes, getRecipesByIngredient, getRecipeInformationList};
 

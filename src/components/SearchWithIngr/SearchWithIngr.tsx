@@ -7,9 +7,10 @@ import CustomSnackBar from '../CustomSnackBar/CustomSnackBar';
 
 type SearchWithIngrProps = {
     handleBack(): void;
+    searchWithIngredient(ingredients: string[]): void;
 }
 
-const SearchWithIngr = ({handleBack}: SearchWithIngrProps) : JSX.Element => {
+const SearchWithIngr = ({handleBack, searchWithIngredient}: SearchWithIngrProps) : JSX.Element => {
   const [inputText, setInputText] = useState('');
   const [ingrList, setIngrList] = useState<string[]>([]);
   const [isInputError, setIsInputError] = useState(false);
@@ -89,12 +90,12 @@ const SearchWithIngr = ({handleBack}: SearchWithIngrProps) : JSX.Element => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-        <Button variant="outlined" startIcon={<SearchIcon />}>
+        <Button disabled={ingrList.length === 0} variant="outlined" startIcon={<SearchIcon />} onClick={() => searchWithIngredient(ingrList)}>
             Search
         </Button>
       </div>
 
-      <CustomSnackBar open={isInputError} message={'Please enter an unique value!'} autoHideDuration={3000} handleClose={handleAlertClose} severity={'error'}/>
+      <CustomSnackBar open={isInputError} message={'Please enter a unique value!'} autoHideDuration={3000} handleClose={handleAlertClose} severity={'error'}/>
     </div>
   );
 };

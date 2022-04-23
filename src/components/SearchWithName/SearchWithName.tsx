@@ -38,7 +38,7 @@ const SearchWithName = ({handleBack, searchWithName} : SearchWithNameProps) : JS
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-        <Button variant="outlined" startIcon={<SearchIcon />} onClick={() => searchWithName(inputText)}>
+        <Button disabled={!inputText} variant="outlined" startIcon={<SearchIcon />} onClick={() => searchWithName(inputText)}>
           Search
         </Button>
       </div>
