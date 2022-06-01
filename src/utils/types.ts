@@ -20,7 +20,7 @@ export type RecipeInformation = {
   vegetarian: boolean,
   vegan: boolean,
   glutenFree: boolean,
-  dairyFree: boolean
+  dairyFree: boolean,
   extendedIngredients: Ingredient[],
   servings: number,
   summary: string,

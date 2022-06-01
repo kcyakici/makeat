@@ -4,6 +4,9 @@ import * as React from 'react';
 import {useState} from 'react';
 import {RecipeInformation} from '../../utils/types';
 import RecipeModal from '../RecipeModal/RecipeModal';
+import RestaurantIcon from '@mui/icons-material/Restaurant';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 type RecipeCardProps = {
   recipeInfo: RecipeInformation
@@ -33,14 +36,41 @@ const RecipeCard = ({recipeInfo} : RecipeCardProps) : JSX.Element => {
             height="194"
             image={recipeInfo.image}/>
 
-          <CardContent>
-            <Typography variant="body2" color="text.secondary">
-            I do not even understand how Swedish people are able to eat this absolute madness of a dish
-            </Typography>
+          <CardContent sx={{maxHeight: '46px'}}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+            }}>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'row'}}>
+                <Typography variant="h6" color="text.secondary">
+                  {recipeInfo.servings}
+                </Typography>
+                <RestaurantIcon color='secondary'/>
+              </div>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'row'}}>
+                <Typography variant="h6" color="text.secondary">
+                  {recipeInfo.readyInMinutes} Min
+                </Typography>
+                <HourglassBottomIcon color='secondary'/>
+              </div>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'row'}}>
+                <Typography variant="h6" color="text.secondary">
+                  {recipeInfo.healthScore}
+                </Typography>
+                <FavoriteIcon color='secondary'/>
+              </div>
+            </div>
           </CardContent>
         </CardActionArea>
       </Card>
-      <RecipeModal open={isRecipeModelOpen} handleClose={handleModelClose}/>
+      <RecipeModal open={isRecipeModelOpen} handleClose={handleModelClose} recipeInfo={recipeInfo}/>
     </div>
   );
 };
