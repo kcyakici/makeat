@@ -9,6 +9,7 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import {useCart} from '../../hooks/CartProvider';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -37,6 +38,7 @@ const RecipeModal = ({open, handleClose, recipeInfo}: RecipeModalProps): JSX.Ele
   const [ingredients, setIngredients] = React.useState(recipeInfo.extendedIngredients);
   const [checkedIngredientIds, setCheckedIngredientIds] = React.useState([] as number[]);
   const [measuresPerServing, setMeasuresPerServing] = React.useState([] as number[]);
+  const {recipeInfoList, ingredientList, setRecipeInfoList, setIngredientList} = useCart();
 
   React.useEffect(() => {
     const measuresPerServing = ingredients.map((ingredient) => ingredient.measures.metric.amount / recipeInfo.servings);
@@ -70,11 +72,42 @@ const RecipeModal = ({open, handleClose, recipeInfo}: RecipeModalProps): JSX.Ele
   };
 
   const handleAddToCart = (): void => {
-    if (checkedIngredientIds.length === 0) {
-      console.log('No ingredients selected');
-    } else {
-      console.log('Ingredients selected: ' + checkedIngredientIds);
+    // TODO: Add to cart dedikten sonra disable et butonu
+    if (recipeInfoList.find((recipe) => recipe.id === recipeInfo.id)) {
+      // TODO: customsnackbari kullan error firlat
+      return;
     }
+
+    addRecipeInfoToContext();
+
+    if (checkedIngredientIds.length === 0) {
+      addAllIngredientsToContenxt();
+    } else {
+      addCheckedIngredientsToContext();
+    }
+  };
+
+  const addRecipeInfoToContext = () => {
+    const newRecipeInfoList = [...recipeInfoList];
+    newRecipeInfoList.push(recipeInfo);
+    setRecipeInfoList(newRecipeInfoList);
+  };
+
+  const addAllIngredientsToContenxt = () => {
+    const newIngredientList = [...ingredientList];
+    newIngredientList.push(...ingredients);
+    setIngredientList(newIngredientList);
+  };
+
+  const addCheckedIngredientsToContext = () => {
+    const newIngredientList = [...ingredientList];
+    checkedIngredientIds.forEach((id) => {
+      const checkedIngredient = ingredients.find((ingredient) => ingredient.id === id);
+      if (checkedIngredient) {
+        newIngredientList.push(checkedIngredient);
+      }
+    });
+    setIngredientList(newIngredientList);
   };
 
   const incServing = (): void => {

@@ -6,10 +6,11 @@ import {
 import * as React from 'react';
 import {Link} from 'react-router-dom';
 import logo from '../../assets/img/transparent-logo.png';
-import {ItemCountContext} from '../../hooks/ItemCountContext';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import {useCart} from '../../hooks/CartProvider';
 
-export default function NavBar() {
-  const itemCount = React.useContext(ItemCountContext);
+const NavBar = (): JSX.Element => {
+  const {recipeInfoList} = useCart();
 
   return (
     <AppBar position="static">
@@ -25,11 +26,14 @@ export default function NavBar() {
           <Button variant="text" sx={{color: 'white'}}>Contact</Button>
         </Link>
         <Link to="/items">
-          <Badge badgeContent={itemCount} color="secondary">
-            <Button variant="text" sx={{color: 'white'}}>Items</Button>
+          <Button variant="text" sx={{color: 'white'}}>Items</Button>
+          <Badge badgeContent={recipeInfoList.length} color="secondary">
+            <ShoppingCartIcon sx={{color: 'white'}}/>
           </Badge>
         </Link>
       </Toolbar>
     </AppBar>
   );
-}
+};
+
+export default NavBar;
