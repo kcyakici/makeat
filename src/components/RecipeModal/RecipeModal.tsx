@@ -222,11 +222,15 @@ const RecipeModal = ({open, handleClose, recipeInfo}: RecipeModalProps): JSX.Ele
                 {checkedIngredientIds.length > 0 ? 'Add ' + checkedIngredientIds.length + ' Ingredient(s)' : 'Add All to Cart'}
               </Button>
             </Grid>
-            <Grid item xs={7}>
+            <Grid item xs={7} sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              height: '100%',
+            }}>
               <Typography variant="h5">
                 Instructions
               </Typography>
-              <Typography
+              <Typography sx={{overflowY: 'scroll'}}
                 dangerouslySetInnerHTML={{__html: recipeInfo.instructions}}
                 variant="body1">
               </Typography>

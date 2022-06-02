@@ -114,7 +114,7 @@ const Home = () : JSX.Element => {
         alignItems: 'center',
         gap: '10%',
         marginTop: '30px',
-        height: '30vh',
+        overflowY: 'scroll',
       }}>
         {isLoading ? <CircularProgress color='secondary' /> :
         <>{recipeInfoList.map((recipeInfo: RecipeInformation) => (

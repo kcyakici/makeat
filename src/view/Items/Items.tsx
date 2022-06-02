@@ -11,13 +11,27 @@ const Items = (): JSX.Element => {
   const {recipeInfoList, ingredientList} = useCart();
 
   return (
-    <div>
-      <Box>
-        <Grid container spacing={2}>
-          <Grid item xs={8}>
+    <Box sx={{
+      height: 'calc(100% - 64px)',
+      flexGrow: 1,
+    }}>
+      <Grid container spacing={2} sx={{
+        height: '100%',
+      }}>
+        <Grid item xs={8} sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+        }}>
+          <Typography>
+            Recipes
+          </Typography>
+          {recipeInfoList.length === 0 && (
             <Typography>
-              Recipe Name
+              No recipes added
             </Typography>
+          )}
+          <div style={{overflowY: 'scroll'}}>
             {recipeInfoList.map((recipeInfo) => (
               <div key={recipeInfo.id}>
                 <div>
@@ -29,29 +43,33 @@ const Items = (): JSX.Element => {
                 <Divider/>
               </div>
             ))}
-          </Grid>
-          <Grid item xs={4}>
-            <Typography>
-              Total Needed Ingredients:
-            </Typography>
-            <List sx={{
-              overflowY: 'scroll',
-            }}>
-              {ingredientList.map((ingredient) => (
-                <div key={ingredient.id}>
-
-                  <ListItem key={ingredient.id} disablePadding>
-                    <ListItemText primary={ingredient.name} secondary={getMeasurementText(ingredient)} />
-                  </ListItem>
-
-                  {/* <h3>{}{ingredient.name} - {getMeasurementText(ingredient)}</h3> */}
-                </div>
-              ))}
-            </List>
-          </Grid>
+          </div>
         </Grid>
-      </Box>
-    </div>
+        <Grid item xs={4} sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+        }}>
+          <Typography>
+            Total Needed Ingredients:
+          </Typography>
+          <List sx={{
+            overflowY: 'scroll',
+          }}>
+            {ingredientList.map((ingredient) => (
+              <div key={ingredient.id}>
+
+                <ListItem key={ingredient.id} disablePadding>
+                  <ListItemText primary={ingredient.name} secondary={getMeasurementText(ingredient)} />
+                </ListItem>
+
+                {/* <h3>{}{ingredient.name} - {getMeasurementText(ingredient)}</h3> */}
+              </div>
+            ))}
+          </List>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

@@ -15,7 +15,11 @@ function App() {
   return (
     <BrowserRouter>
       <CartProvider>
-        <>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',
+        }}>
           <NavBar />
           <Routes>
             <Route path="/" element={<Home />}/>
@@ -24,7 +28,7 @@ function App() {
             <Route path="items" element={<Items />} />
             <Route path="*" element={<NoPage />} />
           </Routes>
-        </>
+        </div>
       </CartProvider>
     </BrowserRouter>
   );
