@@ -1,5 +1,6 @@
 import {Box, Grid, List, ListItem, ListItemText, Typography, Divider} from '@mui/material';
 import React from 'react';
+import RecipeListItem from '../../components/RecipeListItem/RecipeListItem';
 import {useCart} from '../../hooks/CartProvider';
 import {Ingredient} from '../../utils/types';
 
@@ -24,22 +25,17 @@ const Items = (): JSX.Element => {
           height: '100%',
         }}>
           <Typography>
-            Recipes
+          Recipes
           </Typography>
           {recipeInfoList.length === 0 && (
             <Typography>
-              No recipes added
+            No recipes added
             </Typography>
           )}
           <div style={{overflowY: 'scroll'}}>
             {recipeInfoList.map((recipeInfo) => (
               <div key={recipeInfo.id}>
-                <div>
-                  <h3>{recipeInfo.title}</h3>
-                  <img src={recipeInfo.image}
-                    width='25%'
-                  />
-                </div>
+                <RecipeListItem recipeInfo={recipeInfo}/>
                 <Divider/>
               </div>
             ))}
@@ -51,7 +47,7 @@ const Items = (): JSX.Element => {
           height: '100%',
         }}>
           <Typography>
-            Total Needed Ingredients:
+          Total Needed Ingredients:
           </Typography>
           <List sx={{
             overflowY: 'scroll',

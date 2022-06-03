@@ -1,5 +1,5 @@
 import {Button, CircularProgress, Divider, Stack} from '@mui/material';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import CustomSnackBar from '../../components/CustomSnackBar/CustomSnackBar';
 import RecipeCard from '../../components/RecipeCard/RecipeCard';
 import SearchWithIngr from '../../components/SearchWithIngr/SearchWithIngr';
@@ -77,9 +77,9 @@ const Home = () : JSX.Element => {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    fetchData('burger');
-  }, []);
+  // useEffect(() => {
+  //   fetchData('burger');
+  // }, []);
 
   return (
     <>
