@@ -1,12 +1,15 @@
-import {Box, Grid, List, ListItem, ListItemText, Typography, Divider} from '@mui/material';
+import {Box, Grid, List, ListItem, ListItemText, Typography} from '@mui/material';
 import React from 'react';
-import RecipeListItem from '../../components/RecipeListItem/RecipeListItem';
+import RecipeCard from '../../components/RecipeCard/RecipeCard';
 import {useCart} from '../../hooks/CartProvider';
 import {Ingredient} from '../../utils/types';
+
 
 const getMeasurementText = (ingredient: Ingredient) : string => {
   return ingredient.measures.metric.amount + ' ' + ingredient.measures.metric.unitLong;
 };
+
+// 4. Delete Recipe
 
 const Items = (): JSX.Element => {
   const {recipeInfoList, ingredientList} = useCart();
@@ -18,13 +21,16 @@ const Items = (): JSX.Element => {
     }}>
       <Grid container spacing={2} sx={{
         height: '100%',
+        paddingTop: '1rem',
+        paddingLeft: '1rem',
+        paddingRight: '1rem',
       }}>
-        <Grid item xs={8} sx={{
+        <Grid item xs={6} sx={{
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
         }}>
-          <Typography>
+          <Typography variant="h4">
           Recipes
           </Typography>
           {recipeInfoList.length === 0 && (
@@ -34,19 +40,16 @@ const Items = (): JSX.Element => {
           )}
           <div style={{overflowY: 'scroll'}}>
             {recipeInfoList.map((recipeInfo) => (
-              <div key={recipeInfo.id}>
-                <RecipeListItem recipeInfo={recipeInfo}/>
-                <Divider/>
-              </div>
+              <RecipeCard key={recipeInfo.id} recipeInfo={recipeInfo}/>
             ))}
           </div>
         </Grid>
-        <Grid item xs={4} sx={{
+        <Grid item xs={6} sx={{
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
         }}>
-          <Typography>
+          <Typography variant="h4">
           Total Needed Ingredients:
           </Typography>
           <List sx={{

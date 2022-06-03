@@ -10,6 +10,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {useCart} from '../../hooks/CartProvider';
+import CustomSnackBar from '../CustomSnackBar/CustomSnackBar';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -39,6 +40,7 @@ const RecipeModal = ({open, handleClose, recipeInfo}: RecipeModalProps): JSX.Ele
   const [checkedIngredientIds, setCheckedIngredientIds] = React.useState([] as number[]);
   const [measuresPerServing, setMeasuresPerServing] = React.useState([] as number[]);
   const {recipeInfoList, ingredientList, setRecipeInfoList, setIngredientList} = useCart();
+  const [isSuccess, setIsSuccess] = React.useState(false);
 
   React.useEffect(() => {
     const measuresPerServing = ingredients.map((ingredient) => ingredient.measures.metric.amount / recipeInfo.servings);
@@ -56,6 +58,8 @@ const RecipeModal = ({open, handleClose, recipeInfo}: RecipeModalProps): JSX.Ele
     });
 
     setIngredients(newIngredients);
+    recipeInfo.servings = servings;
+    recipeInfo.extendedIngredients = newIngredients;
   }, [servings]);
 
   const handleToggle = (id: number) => {
@@ -71,12 +75,14 @@ const RecipeModal = ({open, handleClose, recipeInfo}: RecipeModalProps): JSX.Ele
     setCheckedIngredientIds(newCheckedIngredientIds);
   };
 
+  const handleAlertClose = () => {
+    setIsSuccess(false);
+  };
+
   const handleAddToCart = (): void => {
-    // TODO: Add to cart dedikten sonra disable et butonu
-    if (recipeInfoList.find((recipe) => recipe.id === recipeInfo.id)) {
-      // TODO: customsnackbari kullan error firlat
-      return;
-    }
+    if (recipeInfoList.find((recipe) => recipe.id === recipeInfo.id)) return;
+
+    setIsSuccess(true);
 
     addRecipeInfoToContext();
 
@@ -165,10 +171,20 @@ const RecipeModal = ({open, handleClose, recipeInfo}: RecipeModalProps): JSX.Ele
                     display: 'flex',
                     flexDirection: 'column',
                   }}>
-                    <IconButton aria-label="add" size="small" color='primary' onClick={() => incServing()}>
+                    <IconButton
+                      aria-label="add"
+                      size="small"
+                      color='primary'
+                      onClick={() => incServing()}
+                      disabled={recipeInfoList.find((recipe) => recipe.id === recipeInfo.id) ? true : false}>
                       <AddIcon fontSize="inherit"/>
                     </IconButton>
-                    <IconButton aria-label="remove" size="small" color='primary' onClick={() => decServing()}>
+                    <IconButton
+                      aria-label="remove"
+                      size="small"
+                      color='primary'
+                      onClick={() => decServing()}
+                      disabled={recipeInfoList.find((recipe) => recipe.id === recipeInfo.id) ? true : false}>
                       <RemoveIcon fontSize="inherit"/>
                     </IconButton>
                   </div>
@@ -215,10 +231,15 @@ const RecipeModal = ({open, handleClose, recipeInfo}: RecipeModalProps): JSX.Ele
                   </ListItem>
                 ))}
               </List>
-              <Button variant="contained" color='secondary' onClick={() => handleAddToCart()} sx={{
-                marginTop: '8px',
-                marginBottom: '8px',
-              }}>
+              <Button
+                variant="contained"
+                color='secondary'
+                onClick={() => handleAddToCart()}
+                disabled={recipeInfoList.find((recipe) => recipe.id === recipeInfo.id) ? true : false}
+                sx={{
+                  marginTop: '8px',
+                  marginBottom: '8px',
+                }}>
                 {checkedIngredientIds.length > 0 ? 'Add ' + checkedIngredientIds.length + ' Ingredient(s)' : 'Add All to Cart'}
               </Button>
             </Grid>
@@ -238,11 +259,9 @@ const RecipeModal = ({open, handleClose, recipeInfo}: RecipeModalProps): JSX.Ele
           </Grid>
         </Box>
       </Modal>
+      <CustomSnackBar open={isSuccess} message={'Item is added to the cart!'} autoHideDuration={3000} handleClose={handleAlertClose} severity={'success'}/>
     </div>
   );
 };
 
 export default RecipeModal;
-
-// Bir listeyi kullanarak birden fazla şeyi nasıl yazdırıyorduk -> Home (Ingredient için) map
-// divider düşün spacing koymuştum zaten

@@ -16,12 +16,19 @@ const SearchWithName = ({handleBack, searchWithName} : SearchWithNameProps) : JS
   };
 
   return (
-    <>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '30vh',
+    }}>
       <div style={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '30vh',
+        height: '50%', // %50 height dene
+        width: '100%',
       }}>
         <IconButton onClick={handleBack}>
           <ArrowBackIosNewIcon/>
@@ -42,7 +49,7 @@ const SearchWithName = ({handleBack, searchWithName} : SearchWithNameProps) : JS
           Search
         </Button>
       </div>
-    </>
+    </div>
   );
 };
 

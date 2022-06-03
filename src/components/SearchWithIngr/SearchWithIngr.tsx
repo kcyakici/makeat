@@ -49,40 +49,48 @@ const SearchWithIngr = ({handleBack, searchWithIngredient}: SearchWithIngrProps)
     }}>
       <div style={{
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         height: '50%', // %50 height dene
         width: '100%',
       }}>
-        <IconButton onClick={handleBack}>
-          <ArrowBackIosNewIcon/>
-        </IconButton>
-        <TextField fullWidth
-          onChange={onTextChange}
-          value={inputText}
-          label={'Enter an Ingredient (eg. Potato)'}
-          id="fullWidth"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position='end'>
-                <IconButton onClick={addIngr} color='secondary'>
-                  <AddOutlinedIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }} />
-      </div>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '50%', // %50 height dene
+          width: '100%',
+        }}>
+          <IconButton onClick={handleBack}>
+            <ArrowBackIosNewIcon/>
+          </IconButton>
+          <TextField fullWidth
+            onChange={onTextChange}
+            value={inputText}
+            label={'Enter an Ingredient (eg. Potato)'}
+            id="fullWidth"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <IconButton onClick={addIngr} color='secondary'>
+                    <AddOutlinedIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }} />
+        </div>
 
-
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-      }}>
-        {ingrList.map((ingr: string) => (
-          <Chip color='secondary' key={ingr} label={ingr} onDelete={() => handleIngrDelete(ingr)} sx={{marginRight: '6px'}}/>
-        ))}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+        }}>
+          {ingrList.map((ingr: string) => (
+            <Chip color='secondary' key={ingr} label={ingr} onDelete={() => handleIngrDelete(ingr)} sx={{marginRight: '6px'}}/>
+          ))}
+        </div>
       </div>
 
       <div style={{
