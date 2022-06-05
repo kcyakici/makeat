@@ -6,7 +6,7 @@ import {Recipe, RecipeInformation, RecipeResponse} from '../utils/types';
 const getRecipes = async (name: string): Promise<AxiosResponse<RecipeResponse>> => {
   const params = {
     query: name,
-    number: '6',
+    number: '3',
   };
 
   return await instance.get('/recipes/complexSearch', {params: params});
@@ -15,7 +15,7 @@ const getRecipes = async (name: string): Promise<AxiosResponse<RecipeResponse>> 
 const getRecipesByIngredient = async (ingredients: string[]) : Promise<AxiosResponse<Recipe[]>> => {
   const params = {
     ingredients: ingredients,
-    number: '6',
+    number: '3',
     ranking: '1',
     ignorePantry: 'false',
   };

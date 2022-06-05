@@ -1,4 +1,4 @@
-import {CardActionArea, CardContent, CardHeader, CardMedia, Typography} from '@mui/material';
+import {CardActionArea, CardContent, CardHeader, CardMedia, IconButton, Typography} from '@mui/material';
 import Card from '@mui/material/Card';
 import * as React from 'react';
 import {useState} from 'react';
@@ -7,12 +7,15 @@ import RecipeModal from '../RecipeModal/RecipeModal';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 type RecipeCardProps = {
-  recipeInfo: RecipeInformation
+  recipeInfo: RecipeInformation,
+  deleteEnabled: boolean,
+  onDelete: (id: number) => void;
 }
 
-const RecipeCard = ({recipeInfo} : RecipeCardProps) : JSX.Element => {
+const RecipeCard = ({recipeInfo, deleteEnabled, onDelete} : RecipeCardProps) : JSX.Element => {
   const [isRecipeModelOpen, setIsRecipeModelOpen] = useState(false);
 
   const handleModelClose = () => {
@@ -26,11 +29,17 @@ const RecipeCard = ({recipeInfo} : RecipeCardProps) : JSX.Element => {
   return (
     <div>
       <Card sx={{maxWidth: 345}}>
-        <CardActionArea onClick={() => handleModelOpen()}>
-          <CardHeader
-            title={recipeInfo.title}
-          />
+        <CardHeader
+          title={recipeInfo.title}
+          action={
+            deleteEnabled &&
+            <IconButton aria-label="remove" onClick={() => onDelete(recipeInfo.id)}>
+              <DeleteIcon color='error' />
+            </IconButton>
+          }
+        />
 
+        <CardActionArea onClick={() => handleModelOpen()}>
           <CardMedia
             component="img"
             height="194"

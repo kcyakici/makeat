@@ -118,7 +118,7 @@ const Home = () : JSX.Element => {
       }}>
         {isLoading ? <CircularProgress color='secondary' /> :
         <>{recipeInfoList.map((recipeInfo: RecipeInformation) => (
-          <RecipeCard key={recipeInfo.id} recipeInfo={recipeInfo}/>
+          <RecipeCard key={recipeInfo.id} recipeInfo={recipeInfo} deleteEnabled={false} onDelete={() => {}}/>
         ))}</>
         }
       </div>

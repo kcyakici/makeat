@@ -12,7 +12,34 @@ const getMeasurementText = (ingredient: Ingredient) : string => {
 // 4. Delete Recipe
 
 const Items = (): JSX.Element => {
-  const {recipeInfoList, ingredientList} = useCart();
+  const {recipeInfoList, setRecipeInfoList, ingredientList, setIngredientList} = useCart();
+
+  const handleDelete = (id: number) => {
+    const recipeToDelete = recipeInfoList.find((recipe) => recipe.id === id);
+    if (!recipeToDelete) return;
+
+    const newRecipeInfoList = [...recipeInfoList];
+    const index = newRecipeInfoList.indexOf(recipeToDelete);
+    newRecipeInfoList.splice(index, 1);
+    setRecipeInfoList(newRecipeInfoList);
+
+    const indexesToDelete = [] as number[];
+    recipeToDelete.extendedIngredients.forEach((ingredient) => {
+      const ingredientToDelete = ingredientList.find((ingr) => ingr === ingredient); // TODO: attention
+      if (!ingredientToDelete) return;
+
+      const newIngredientList = [...ingredientList];
+      const index = newIngredientList.indexOf(ingredientToDelete);
+      indexesToDelete.push(index);
+    });
+
+    const newIngredientList = [...ingredientList];
+    indexesToDelete.sort((a, b) => b - a);
+    indexesToDelete.forEach((index) => {
+      newIngredientList.splice(index, 1);
+    });
+    setIngredientList(newIngredientList);
+  };
 
   return (
     <Box sx={{
@@ -38,9 +65,17 @@ const Items = (): JSX.Element => {
             No recipes added
             </Typography>
           )}
-          <div style={{overflowY: 'scroll'}}>
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '10%',
+            marginTop: '30px',
+            overflowY: 'scroll',
+          }}>
             {recipeInfoList.map((recipeInfo) => (
-              <RecipeCard key={recipeInfo.id} recipeInfo={recipeInfo}/>
+              <RecipeCard key={recipeInfo.id} recipeInfo={recipeInfo} deleteEnabled={true} onDelete={(id) => handleDelete(id)}/>
             ))}
           </div>
         </Grid>
@@ -50,7 +85,7 @@ const Items = (): JSX.Element => {
           height: '100%',
         }}>
           <Typography variant="h4">
-          Total Needed Ingredients:
+          Total Needed Ingredients
           </Typography>
           <List sx={{
             overflowY: 'scroll',
